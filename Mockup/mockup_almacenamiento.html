@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MercaFácil — Almacenamientos (Mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#071226;
+    --bg-1:#0b1724;
+    --panel:#071827;
+    --card:#0b1320;
+    --accent:#00bcd4;
+    --accent-2:#4fe6e9;
+    --muted:#94a3b8;
+    --glass:rgba(255,255,255,0.03);
+    --border:rgba(255,255,255,0.04);
+    --danger:#ef4444;
+    --success:#16a34a;
+    font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background: linear-gradient(180deg,var(--bg-0) 0%, #06121a 100%);
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    font-size:14px;
+  }
+
+  .app{display:flex;min-height:100vh}
+  .sidebar{
+    width:220px;background:linear-gradient(180deg,var(--bg-1),#061226);
+    padding:22px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:14px;
+  }
+  .brand{font-weight:800;color:var(--accent);font-size:18px}
+  .menu{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+  .menu li{padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+  .menu li:hover{background:rgba(255,255,255,0.02);color:#fff}
+  .menu li.active{background:rgba(0,188,212,0.06);color:#fff}
+
+  .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:18px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  .title{font-size:20px;font-weight:700}
+  .subtitle{color:var(--muted);font-size:13px}
+
+  .content{display:flex;gap:18px;align-items:flex-start}
+  .left{flex:1;display:flex;flex-direction:column;gap:12px}
+  .card{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid var(--border)}
+  h3{margin:0 0 10px 0;font-size:16px}
+
+  /* Lista de almacenes */
+  .warehouse-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+  .warehouse{
+    padding:12px;border-radius:10px;background:linear-gradient(180deg,#071827,#06121a);border:1px solid rgba(255,255,255,0.03);
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .warehouse .name{font-weight:700;color:#fff}
+  .warehouse .meta{color:var(--muted);font-size:13px}
+  .progress{height:8px;background:rgba(255,255,255,0.03);border-radius:6px;overflow:hidden}
+  .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));}
+
+  .actions{display:flex;gap:8px;align-items:center}
+  .btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071226}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:#fff}
+  .btn-sm{padding:6px 8px;font-size:13px}
+
+  /* Panel derecho: detalles y transferencias */
+  .side{width:360px;display:flex;flex-direction:column;gap:12px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input, select, textarea{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));color:#fff;outline:none}
+  textarea{min-height:80px}
+
+  .section{margin-bottom:12px;padding-bottom:8px;border-bottom:1px dashed rgba(255, 255, 255, 0.02)}
+  .row{display:flex;gap:8px}
+  .col{flex:1}
+
+  .map-mock{height:140px;border-radius:8px;background:linear-gradient(180deg, rgba(0,188,212,0.04), rgba(79,230,233,0.02));display:flex;align-items:center;justify-content:center;color:#ffffff;font-weight:700}
+
+  .transfer-list{display:flex;flex-direction:column;gap:8px}
+  .transfer-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:rgba(255,255,255,0.01);border:1px solid var(--border)}
+  .muted{color:var(--muted);font-size:13px}
+
+  .chip{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted);font-size:13px}
+
+  @media (max-width:980px){
+    .content{flex-direction:column}
+    .side{width:100%}
+    .sidebar{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-hidden="false">
+    <div class="brand">MercaFácil</div>
+    <ul class="menu" role="menu">
+      <li>Inicio</li>
+      <li class="active">Productos</li>
+      <li>Almacén</li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <div>
+        <div class="title">Almacenes</div>
+        <div class="subtitle">Gestiona almacenes, ubicaciones y transferencias entre depósitos</div>
+      </div>
+      <div style="text-align:right">
+        <div class="muted">Usuario</div>
+        <div style="font-weight:700">Christopher</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="left">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3>Almacenes</h3>
+            <div class="actions">
+              <button id="newWarehouse" class="btn btn-primary">Nuevo almacén</button>
+              <button id="refresh" class="btn btn-ghost btn-sm">Actualizar</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="warehouse-list" id="warehouseList">
+            <!-- Almacenes generados por JS -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Vista rápida de ubicaciones</h3>
+          <div class="muted">Zonas y pasillos con capacidad y ocupación</div>
+          <div style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">
+            <div class="warehouse">
+              <div class="name">Almacén Central · Zona A</div>
+              <div class="meta">Pasillo 1 · Estantes: 12</div>
+              <div class="progress"><i style="width:62%"></i></div>
+              <div class="meta">Ocupación 62%</div>
+            </div>
+            <div class="warehouse">
+              <div class="name">Almacen B · Zona B</div>
+              <div class="meta">Pasillo 3 · Estantes: 8</div>
+              <div class="progress"><i style="width:28%"></i></div>
+              <div class="meta">Ocupación 28%</div>
+            </div>
+            <div class="warehouse">
+              <div class="name">Sucursal C · Zona C</div>
+              <div class="meta">Pasillo 2 · Estantes: 10</div>
+              <div class="progress"><i style="width:84%"></i></div>
+              <div class="meta">Ocupación 84%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Historial de movimientos</h3>
+          <div class="muted">Últimas transferencias y ajustes</div>
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+            <div class="transfer-item"><div><strong>Taladro 500W</strong><div class="muted">8 unidades · Almacen B → Almacén Central</div></div><div class="muted">hace 2h</div></div>
+            <div class="transfer-item"><div><strong>Aceite 1L</strong><div class="muted">50 unidades · Ajuste de stock</div></div><div class="muted">ayer</div></div>
+            <div class="transfer-item"><div><strong>Laptop HP</strong><div class="muted">5 unidades · Nuevo ingreso</div></div><div class="muted">2 días</div></div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="card">
+          <h3>Detalle de almacén</h3>
+          <div class="muted" id="selectedName">Selecciona un almacén</div>
+          <div style="margin-top:12px" id="selectedInfo">
+            <div class="muted">Capacidad: —</div>
+            <div class="muted">Ocupación: —</div>
+            <div class="muted">Ubicaciones: —</div>
+          </div>
+          <div style="margin-top:12px" class="map-mock">Mapa de ubicaciones</div>
+        </div>
+
+        <div class="card">
+          <h3>Transferencia entre almacenes</h3>
+          <label for="fromWh">Desde</label>
+          <select id="fromWh"></select>
+          <label for="toWh" style="margin-top:8px">Hacia</label>
+          <select id="toWh"></select>
+          <label for="prodSelect" style="margin-top:8px">Producto</label>
+          <select id="prodSelect">
+            <option>Laptop HP 15"</option>
+            <option>Aceite de cocina 1L</option>
+            <option>Taladro 500W</option>
+          </select>
+          <div class="row" style="margin-top:8px">
+            <input id="transferQty" type="number" min="1" value="1" />
+            <button id="doTransfer" class="btn btn-primary">Transferir</button>
+          </div>
+          <div id="transferMsg" class="muted" style="margin-top:8px"></div>
+        </div>
+
+        <div class="card">
+          <h3>Configuración rápida</h3>
+          <label for="capacity">Capacidad por ubicación</label>
+          <input id="capacity" type="number" min="1" value="100" />
+          <label style="margin-top:8px">Reglas</label>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <div class="chip">Alertas por stock</div>
+            <div class="chip">Control por lote</div>
+            <div class="chip">Reservas por pedido</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Datos de ejemplo
+  const warehouses = [
+    {id: 'wh1', name: 'Almacén Central', location: 'Ciudad', capacity: 1200, occupied: 744, zones: 6},
+    {id: 'wh2', name: 'Almacen B', location: 'Zona Norte', capacity: 800, occupied: 224, zones: 4},
+    {id: 'wh3', name: 'Sucursal C', location: 'Zona Sur', capacity: 600, occupied: 504, zones: 5}
+  ];
+
+  const products = [
+    {id:'p1', title:'Laptop HP 15"', stock:{wh1:15,wh2:2,wh3:0}},
+    {id:'p2', title:'Aceite de cocina 1L', stock:{wh1:120,wh2:30,wh3:10}},
+    {id:'p3', title:'Taladro 500W', stock:{wh1:8,wh2:0,wh3:0}}
+  ];
+
+  const warehouseList = document.getElementById('warehouseList');
+  const fromWh = document.getElementById('fromWh');
+  const toWh = document.getElementById('toWh');
+  const prodSelect = document.getElementById('prodSelect');
+  const selectedName = document.getElementById('selectedName');
+  const selectedInfo = document.getElementById('selectedInfo');
+  const transferQty = document.getElementById('transferQty');
+  const doTransfer = document.getElementById('doTransfer');
+  const transferMsg = document.getElementById('transferMsg');
+  const capacityInput = document.getElementById('capacity');
+
+  function renderWarehouses(){
+    warehouseList.innerHTML = '';
+    warehouses.forEach(w => {
+      const el = document.createElement('div');
+      el.className = 'warehouse';
+      const occPercent = Math.round((w.occupied / w.capacity) * 100);
+      el.innerHTML = `<div class="name">${w.name}</div>
+                      <div class="meta">${w.location} · Zonas: ${w.zones}</div>
+                      <div class="progress"><i style="width:${occPercent}%"></i></div>
+                      <div class="meta">Ocupación ${occPercent}% · ${w.occupied}/${w.capacity}</div>
+                      <div style="display:flex;gap:8px;margin-top:6px">
+                        <button class="btn btn-sm btn-ghost" data-id="${w.id}" onclick="selectWarehouse('${w.id}')">Ver</button>
+                        <button class="btn btn-sm" onclick="openEdit('${w.id}')">Editar</button>
+                      </div>`;
+      warehouseList.appendChild(el);
+    });
+    // llenar selects
+    fromWh.innerHTML = ''; toWh.innerHTML = '';
+    warehouses.forEach(w => {
+      const o1 = document.createElement('option'); o1.value = w.id; o1.textContent = w.name; fromWh.appendChild(o1);
+      const o2 = document.createElement('option'); o2.value = w.id; o2.textContent = w.name; toWh.appendChild(o2);
+    });
+  }
+
+  function renderProductsSelect(){
+    prodSelect.innerHTML = '';
+    products.forEach(p => {
+      const o = document.createElement('option'); o.value = p.id; o.textContent = p.title; prodSelect.appendChild(o);
+    });
+  }
+
+  function selectWarehouse(id){
+    const w = warehouses.find(x => x.id === id);
+    if(!w) return;
+    selectedName.textContent = w.name;
+    const occPercent = Math.round((w.occupied / w.capacity) * 100);
+    selectedInfo.innerHTML = `<div class="muted">Capacidad: ${w.capacity} unidades</div>
+                              <div class="muted">Ocupación: ${occPercent}% (${w.occupied} unidades)</div>
+                              <div class="muted">Zonas: ${w.zones}</div>`;
+  }
+
+  function openEdit(id){
+    const w = warehouses.find(x => x.id === id);
+    if(!w) return alert('Editar: ' + id);
+    // Demo: scroll to side panel and prefill capacity
+    capacityInput.value = Math.round(w.capacity / w.zones);
+    selectWarehouse(id);
+  }
+
+  // Transferencia simulada
+  doTransfer.addEventListener('click', () => {
+    const from = fromWh.value;
+    const to = toWh.value;
+    const pid = prodSelect.value;
+    const qty = parseInt(transferQty.value) || 0;
+    if(!from || !to || from === to){ transferMsg.textContent = 'Selecciona almacenes distintos.'; return; }
+    if(qty <= 0){ transferMsg.textContent = 'Cantidad debe ser mayor a 0.'; return; }
+    const prod = products.find(p => p.id === pid);
+    if(!prod) return;
+    const available = prod.stock[from] || 0;
+    if(available < qty){ transferMsg.textContent = 'Stock insuficiente en origen.'; return; }
+    // aplicar transferencia
+    prod.stock[from] = available - qty;
+    prod.stock[to] = (prod.stock[to] || 0) + qty;
+    // ajustar ocupación de almacenes (simplificado)
+    const wFrom = warehouses.find(w => w.id === from);
+    const wTo = warehouses.find(w => w.id === to);
+    if(wFrom){ wFrom.occupied = Math.max(0, wFrom.occupied - qty); }
+    if(wTo){ wTo.occupied = Math.min(wTo.capacity, wTo.occupied + qty); }
+    renderWarehouses();
+    selectWarehouse(to);
+    transferMsg.textContent = `Transferencia realizada: ${qty} unidades de "${prod.title}"`;
+    setTimeout(()=> transferMsg.textContent = '', 3500);
+  });
+
+  // Nuevo almacén (simulación)
+  document.getElementById('newWarehouse').addEventListener('click', () => {
+    const id = 'wh' + (warehouses.length + 1);
+    warehouses.push({id, name: 'Nuevo almacén ' + (warehouses.length + 1), location: 'Ubicación', capacity: 500, occupied: 0, zones: 3});
+    renderWarehouses();
+    renderProductsSelect();
+    selectWarehouse(id);
+  });
+
+  // Refresh
+  document.getElementById('refresh').addEventListener('click', () => {
+    renderWarehouses();
+    renderProductsSelect();
+    transferMsg.textContent = 'Datos actualizados';
+    setTimeout(()=> transferMsg.textContent = '', 1400);
+  });
+
+  // Inicializar
+  renderWarehouses();
+  renderProductsSelect();
+  selectWarehouse(warehouses[0].id);
+
+  // Atajos
+  window.addEventListener('keydown', (e) => {
+    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n'){
+      e.preventDefault(); document.getElementById('newWarehouse').click();
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MercaFácil - Principal</title>
+
+<!-- Fuente: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg-0:#071226;
+    --bg-1:#0b1724;
+    --panel:#071827;
+    --card:#0b1320;
+    --accent:#00bcd4;   /* turquesa/azul */
+    --accent-2:#4fe6e9;
+    --muted:#94a3b8;
+    --glass:rgba(255,255,255,0.03);
+    --border:rgba(255,255,255,0.04);
+    --success:#16a34a;
+    --danger:#ef4444;
+    font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background: linear-gradient(180deg,var(--bg-0) 0%, #06121a 100%);
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    font-size:14px;
+  }
+
+  .app{display:flex;min-height:100vh}
+  .sidebar{
+    width:240px;
+    background: linear-gradient(180deg,var(--bg-1), #061226);
+    padding:28px 18px;
+    border-right:1px solid var(--border);
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .brand{font-weight:800;color:var(--accent);font-size:20px;letter-spacing:0.2px}
+  .menu{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+  .menu li{
+    padding:10px 12px;border-radius:10px;color:var(--muted);cursor:pointer;transition:all .12s ease;
+  }
+  .menu li:hover{background:rgba(140, 67, 67, 0.02);color:#fff}
+  .sidebar .meta{color:var(--muted);font-size:13px;margin-top:auto}
+
+  .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:18px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .search{flex:1;display:flex;gap:12px;align-items:center}
+  .search input{
+    flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color:#fff;outline:none;font-size:14px;
+  }
+  .categories{display:flex;gap:8px}
+  .cat{
+    padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.02);
+    color:var(--muted);font-size:13px;font-weight:600;
+  }
+
+  .panel{display:flex;gap:18px;align-items:flex-start}
+  .left{flex:1;display:flex;flex-direction:column;gap:12px}
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:18px;border-radius:12px;border:1px solid var(--border);
+  }
+  .card h3{margin:0 0 8px 0;font-size:16px;color:#fff}
+
+  .placeholder{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:12px;
+  }
+  .product{
+    background: linear-gradient(180deg,#071827, #06121a);
+    padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);
+    min-height:110px;display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .product .title{font-weight:700;color:#fff}
+  .product .meta{color:var(--muted);font-size:13px}
+  .product .price{color:var(--accent);font-weight:700}
+
+  .stats{display:flex;gap:12px}
+  .stat{flex:1;padding:14px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));text-align:center}
+  .stat .num{font-size:20px;font-weight:800;color:#fff}
+  .stat .label{color:var(--muted);font-size:13px}
+
+  .banner{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;background:linear-gradient(90deg, rgba(0,188,212,0.08), rgba(79,230,233,0.02));border:1px solid rgba(0,188,212,0.08)}
+  .banner .icon{width:48px;height:48px;border-radius:8px;background:linear-gradient(180deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#071226}
+  .banner .title{font-weight:700;color:#ecedef}
+  .banner .desc{color:#c2c4c7;opacity:0.9;font-size:13px}
+
+  .muted{color:var(--muted);font-size:13px}
+  .footer{margin-top:12px;color:var(--muted);font-size:13px}
+
+  @media (max-width:880px){
+    .sidebar{display:none}
+    .placeholder{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">MercaFácil</div>
+    <ul class="menu">
+      <li>Inicio</li>
+      <li>Productos</li>
+      <li>Almacén</li>
+    </ul>
+    <div class="meta">Usuario: <strong style="color:#fff">Angel</strong></div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div class="search">
+        <input id="search" placeholder="Buscar productos o categorías..." />
+        <div class="categories" aria-hidden="true">
+          <div class="cat">Supermercado</div>
+          <div class="cat">Tecnología</div>
+          <div class="cat">Ferretería</div>
+          <div class="cat">Hogar</div>
+        </div>
+      </div>
+      <div style="min-width:220px;text-align:right">
+        <div class="muted">Rol</div>
+        <div style="font-weight:700">Administrador</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="left">
+        <div class="card banner" aria-hidden="false">
+          <div class="icon">🏷</div>
+          <div>
+            <div class="title">Productos destacados</div>
+            <div class="desc">Selección destacada por ventas y rotación.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Productos destacados</h3>
+          <div id="placeholder" class="placeholder"></div>
+          <div class="footer">Gestiona destacados desde <strong>Mis Productos</strong></div>
+        </div>
+      </div>
+
+      <aside style="width:320px;display:flex;flex-direction:column;gap:12px">
+        <div class="card">
+          <h3>Estadísticas rápidas</h3>
+          <div class="stats" id="stats">
+            <div class="stat">
+              <div class="label">Total productos</div>
+              <div class="num" id="totalProducts">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Total almacenes</div>
+              <div class="num" id="totalStores">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Categorías</div>
+              <div class="num" id="totalCats">6</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Actividad reciente</h3>
+          <div class="muted">Últimas acciones: actualización de precios, ajuste de stock, creación de producto.</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script>
+  const sampleProducts = [
+    {title:'Laptop HP 15"', meta:'Tecnología · 15 en stock', price:'$12,500'},
+    {title:'Aceite de cocina 1L', meta:'Supermercado · 120 en stock', price:'$45'},
+    {title:'Taladro 500W', meta:'Ferretería · 8 en stock', price:'$1,200'},
+    {title:'Cuaderno A4 100 hojas', meta:'Educación · 200 en stock', price:'$35'},
+    {title:'Cafetera express', meta:'Hogar · 5 en stock', price:'$2,300'},
+    {title:'Camiseta deportiva', meta:'Moda · 40 en stock', price:'$220'}
+  ];
+
+  const placeholder = document.getElementById('placeholder');
+  const totalProducts = document.getElementById('totalProducts');
+  const totalStores = document.getElementById('totalStores');
+  const totalCats = document.getElementById('totalCats');
+
+  function renderProducts(list){
+    placeholder.innerHTML = '';
+    if(!list.length){
+      const empty = document.createElement('div');
+      empty.className = 'product';
+      empty.innerHTML = '<div class="title">Sin productos destacados</div><div class="meta muted">Agrega productos desde Mis Productos</div>';
+      placeholder.appendChild(empty);
+      return;
+    }
+    list.forEach(p=>{
+      const el = document.createElement('div');
+      el.className = 'product';
+      el.innerHTML = '<div><div class="title">'+p.title+'</div><div class="meta">'+p.meta+'</div></div><div style="display:flex;justify-content:space-between;align-items:center"><div class="price">'+p.price+'</div><div style="color:var(--muted);font-size:12px">Ver</div></div>';
+      placeholder.appendChild(el);
+    });
+  }
+
+  renderProducts(sampleProducts);
+  totalProducts.textContent = sampleProducts.length;
+  totalStores.textContent = 3;
+  totalCats.textContent = 6;
+
+  document.getElementById('search').addEventListener('input', (e)=>{
+    const q = e.target.value.trim().toLowerCase();
+    if(!q) renderProducts(sampleProducts);
+    else renderProducts(sampleProducts.filter(p=>p.title.toLowerCase().includes(q)));
+  });
+</script>
+</body>
+</html>

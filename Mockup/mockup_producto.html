@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MercaFácil — Agregar Producto (Mockup)</title>
+
+<!-- Fuente Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg-0:#071226;
+    --bg-1:#0b1724;
+    --panel:#071827;
+    --card:#0b1320;
+    --accent:#00bcd4;   /* turquesa */
+    --accent-2:#4fe6e9;
+    --muted:#94a3b8;
+    --glass:rgba(255,255,255,0.03);
+    --border:rgba(255,255,255,0.04);
+    --danger:#ef4444;
+    --success:#16a34a;
+    font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background: linear-gradient(180deg,var(--bg-0) 0%, #06121a 100%);
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    font-size:14px;
+  }
+
+  .app{display:flex;min-height:100vh}
+  .sidebar{
+    width:220px;background:linear-gradient(180deg,var(--bg-1),#061226);
+    padding:22px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:14px;
+  }
+  .brand{font-weight:800;color:var(--accent);font-size:18px}
+  .menu{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+  .menu li{padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+  .menu li:hover{background:rgba(255,255,255,0.02);color:#fff}
+
+  .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:18px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  .title{font-size:20px;font-weight:700}
+  .subtitle{color:var(--muted);font-size:13px}
+
+  .content{display:flex;gap:18px;align-items:flex-start}
+  .form-panel{flex:1;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid var(--border)}
+  .side-panel{width:320px;display:flex;flex-direction:column;gap:12px}
+
+  h3{margin:0 0 10px 0;font-size:16px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .row{display:flex;gap:12px}
+  .col{flex:1}
+
+  input[type="text"], input[type="number"], input[type="date"], select, textarea{
+    width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color:#fff;outline:none;font-size:14px;
+  }
+  textarea{min-height:90px;resize:vertical;padding-top:10px}
+
+  .small{font-size:12px;color:var(--muted)}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+
+  .section{margin-bottom:14px;padding-bottom:8px;border-bottom:1px dashed rgba(255,255,255,0.02)}
+  .inline{display:flex;gap:8px;align-items:center}
+
+  .file-drop{
+    border:1px dashed rgba(255,255,255,0.04);padding:12px;border-radius:8px;background:rgba(255,255,255,0.01);
+    display:flex;gap:12px;align-items:center;cursor:pointer;
+  }
+  .thumb{width:72px;height:72px;border-radius:8px;background:linear-gradient(180deg,#071827,#06121a);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;border:1px solid rgba(255,255,255,0.03)}
+  .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+  .btn{padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071226}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:#fff}
+  .btn-secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+  .stat-card{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;border:1px solid var(--border)}
+  .stat-num{font-weight:800;font-size:18px}
+  .stat-label{color:var(--muted);font-size:13px}
+
+  .error{color:var(--danger);font-size:13px;margin-top:6px}
+  .ok{color:var(--success);font-size:13px;margin-top:6px}
+
+  .calc-row{display:flex;gap:8px;align-items:center}
+  .chip{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted);font-size:13px}
+
+  @media (max-width:980px){
+    .content{flex-direction:column}
+    .side-panel{width:100%}
+    .sidebar{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-hidden="false">
+    <div class="brand">MercaFácil</div>
+    <ul class="menu" role="menu">
+      <li>Inicio</li>
+      <li style="background:rgba(0,188,212,0.06);color:#fff">Productos</li>
+	  <li>Almacén</li>
+      </ul>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <div>
+        <div class="title">Agregar Producto</div>
+        <div class="subtitle">Completa la información para registrar un nuevo artículo en inventario</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">Usuario</div>
+        <div style="font-weight:700">Christopher</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <section class="form-panel" aria-labelledby="form-title">
+        <h3 id="form-title">Formulario</h3>
+
+        <!-- Información básica -->
+        <div class="section">
+          <label for="name">Nombre del producto</label>
+          <input id="name" type="text" placeholder="¿Cómo se llama este producto?" />
+          <div id="nameErr" class="error" style="display:none"></div>
+
+          <div style="margin-top:10px" class="row">
+            <div class="col">
+              <label for="category">Categoría</label>
+              <select id="category">
+                <option value="">Selecciona categoría</option>
+                <option>Supermercado</option>
+                <option>Tecnología</option>
+                <option>Ferretería</option>
+                <option>Educación</option>
+                <option>Moda</option>
+                <option>Hogar</option>
+              </select>
+            </div>
+            <div class="col">
+              <label for="subcategory">Subcategoría</label>
+              <select id="subcategory">
+                <option value="">Selecciona subcategoría</option>
+              </select>
+            </div>
+            <div style="width:180px">
+              <label for="sku">Código SKU</label>
+              <div style="display:flex;gap:8px">
+                <input id="sku" type="text" placeholder="SKU auto" />
+                <button id="genSku" class="btn btn-secondary" style="padding:8px 10px">Generar</button>
+              </div>
+              <div class="hint">ID interno para seguimiento</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventario -->
+        <div class="section">
+          <label>Inventario</label>
+          <div class="row">
+            <div class="col">
+              <label for="qty">Cantidad inicial</label>
+              <input id="qty" type="number" min="0" step="1" value="0" />
+              <div id="qtyErr" class="error" style="display:none"></div>
+            </div>
+            <div style="width:160px">
+              <label for="unit">Unidad</label>
+              <select id="unit">
+                <option>pieza</option>
+                <option>kg</option>
+                <option>L</option>
+                <option>caja</option>
+              </select>
+            </div>
+            <div style="width:220px">
+              <label for="warehouse">Almacén destino</label>
+              <select id="warehouse">
+                <option>Almacén Central</option>
+                <option>Sucursal Norte</option>
+                <option>Sucursal Sur</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:10px" class="row">
+            <div class="col">
+              <label for="minStock">Stock mínimo (alerta)</label>
+              <input id="minStock" type="number" min="0" step="1" value="0" />
+            </div>
+            <div class="col">
+              <label for="lot">Lote / Serie (opcional)</label>
+              <input id="lot" type="text" placeholder="Número de lote o serie" />
+            </div>
+            <div style="width:180px">
+              <label for="expiry">Fecha caducidad</label>
+              <input id="expiry" type="date" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Precios -->
+        <div class="section">
+          <label>Precios</label>
+          <div class="row">
+            <div class="col">
+              <label for="cost">Costo de compra</label>
+              <input id="cost" type="number" min="0" step="0.01" value="0" />
+            </div>
+            <div class="col">
+              <label for="price">Precio de venta</label>
+              <input id="price" type="number" min="0" step="0.01" value="0" />
+            </div>
+            <div style="width:140px">
+              <label for="currency">Moneda</label>
+              <select id="currency">
+                <option>MXN</option>
+                <option>USD</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:10px" class="calc-row">
+            <div class="chip">Margen: <strong id="margin">0%</strong></div>
+            <div class="chip">Markup: <strong id="markup">0%</strong></div>
+            <div class="hint" style="margin-left:auto">Precio debe ser mayor que costo</div>
+          </div>
+          <div id="priceErr" class="error" style="display:none"></div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="section">
+          <label>Información adicional</label>
+          <div class="row">
+            <div class="col">
+              <label for="brand">Marca / Proveedor</label>
+              <input id="brand" type="text" placeholder="Marca o proveedor" />
+            </div>
+            <div style="width:160px">
+              <label for="warranty">Garantía (meses)</label>
+              <input id="warranty" type="number" min="0" step="1" value="0" />
+            </div>
+            <div style="width:160px">
+              <label for="condition">Condición</label>
+              <select id="condition">
+                <option>Nuevo</option>
+                <option>Reacondicionado</option>
+                <option>Usado</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="notes">Notas / Descripción</label>
+            <textarea id="notes" placeholder="Descripción breve del producto"></textarea>
+          </div>
+        </div>
+
+        <!-- Multimedia -->
+        <div class="section">
+          <label>Multimedia</label>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="file-drop" id="dropZone">
+              <div class="thumb" id="thumb">PNG, JPG</div>
+              <div>
+                <div style="font-weight:700">Imagen principal</div>
+                <div class="small">Arrastra o haz clic para seleccionar (1 imagen)</div>
+              </div>
+            </div>
+            <div style="flex:1">
+              <label for="gallery">Galería (opcional)</label>
+              <input id="gallery" type="file" accept="image/*" multiple />
+              <div class="hint">Se mostrarán miniaturas al subir</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="btn-row">
+          <button id="cancel" class="btn btn-ghost">Cancelar</button>
+          <button id="saveAdd" class="btn btn-secondary">Guardar y agregar otro</button>
+          <button id="save" class="btn btn-primary">Guardar producto</button>
+        </div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="stat-card">
+          <div class="stat-num" id="sideTotal">6</div>
+          <div class="stat-label">Productos en catálogo</div>
+        </div>
+
+        <div class="stat-card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="small">Almacenes</div>
+              <div style="font-weight:700">3</div>
+            </div>
+            <div>
+              <div class="small">Categorías</div>
+              <div style="font-weight:700">6</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="small">Validaciones activas</div>
+          <div style="margin-top:8px">
+            <div class="chip">Precio &gt; Costo</div>
+            <div class="chip" style="margin-left:8px">Cantidad ≥ 0</div>
+            <div class="chip" style="margin-left:8px">Almacén válido</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="small">Atajos</div>
+          <div style="margin-top:8px" class="small">Ctrl+S = Guardar · Ctrl+Enter = Guardar y agregar otro</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Datos de ejemplo para subcategorías
+  const subcats = {
+    "Supermercado": ["Aceites", "Lácteos", "Bebidas", "Abarrotes"],
+    "Tecnología": ["Laptops", "Accesorios", "Celulares", "Componentes"],
+    "Ferretería": ["Herramientas manuales", "Herramientas eléctricas", "Tornillería"],
+    "Educación": ["Cuadernos", "Útiles", "Mobiliario"],
+    "Moda": ["Ropa", "Calzado", "Accesorios"],
+    "Hogar": ["Electrodomésticos", "Cocina", "Decoración"]
+  };
+
+  // Elementos
+  const category = document.getElementById('category');
+  const subcategory = document.getElementById('subcategory');
+  const genSku = document.getElementById('genSku');
+  const sku = document.getElementById('sku');
+  const cost = document.getElementById('cost');
+  const price = document.getElementById('price');
+  const marginEl = document.getElementById('margin');
+  const markupEl = document.getElementById('markup');
+  const priceErr = document.getElementById('priceErr');
+  const qty = document.getElementById('qty');
+  const qtyErr = document.getElementById('qtyErr');
+  const name = document.getElementById('name');
+  const nameErr = document.getElementById('nameErr');
+  const dropZone = document.getElementById('dropZone');
+  const thumb = document.getElementById('thumb');
+  const save = document.getElementById('save');
+  const saveAdd = document.getElementById('saveAdd');
+  const cancel = document.getElementById('cancel');
+
+  // Inicializar subcategorías
+  category.addEventListener('change', () => {
+    const val = category.value;
+    subcategory.innerHTML = '<option value="">Selecciona subcategoría</option>';
+    if(subcats[val]){
+      subcats[val].forEach(s => {
+        const o = document.createElement('option'); o.textContent = s; subcategory.appendChild(o);
+      });
+    }
+  });
+
+  // Generar SKU simple
+  genSku.addEventListener('click', () => {
+    const prefix = (category.value || 'PR').slice(0,3).toUpperCase();
+    const rnd = Math.floor(1000 + Math.random()*9000);
+    sku.value = `${prefix}-${rnd}`;
+  });
+
+  // Cálculo de margen y markup
+  function updateMargins(){
+    const c = parseFloat(cost.value) || 0;
+    const p = parseFloat(price.value) || 0;
+    if(c <= 0){
+      marginEl.textContent = '—';
+      markupEl.textContent = '—';
+      return;
+    }
+    const margin = ((p - c) / p) * 100;
+    const markup = ((p - c) / c) * 100;
+    marginEl.textContent = isFinite(margin) ? `${margin.toFixed(1)}%` : '—';
+    markupEl.textContent = isFinite(markup) ? `${markup.toFixed(1)}%` : '—';
+  }
+  cost.addEventListener('input', updateMargins);
+  price.addEventListener('input', updateMargins);
+
+  // Validaciones simples
+  function validateForm(){
+    let ok = true;
+    // nombre
+    if(!name.value.trim() || name.value.trim().length < 3){
+      nameErr.style.display = 'block';
+      nameErr.textContent = 'Nombre obligatorio (mínimo 3 caracteres).';
+      ok = false;
+    } else {
+      nameErr.style.display = 'none';
+    }
+    // qty
+    if(isNaN(parseInt(qty.value)) || parseInt(qty.value) < 0){
+      qtyErr.style.display = 'block';
+      qtyErr.textContent = 'Cantidad debe ser un número entero ≥ 0.';
+      ok = false;
+    } else {
+      qtyErr.style.display = 'none';
+    }
+    // price > cost
+    const c = parseFloat(cost.value) || 0;
+    const p = parseFloat(price.value) || 0;
+    if(p <= c){
+      priceErr.style.display = 'block';
+      priceErr.textContent = 'El precio de venta debe ser mayor que el costo de compra.';
+      ok = false;
+    } else {
+      priceErr.style.display = 'none';
+    }
+    return ok;
+  }
+
+  // File drop / preview
+  dropZone.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = 'image/*';
+    input.onchange = () => handleFiles(input.files);
+    input.click();
+  });
+
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = 'rgba(79,230,233,0.6)'; });
+  dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = 'rgba(255,255,255,0.04)'; });
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = 'rgba(255,255,255,0.04)';
+    handleFiles(e.dataTransfer.files);
+  });
+
+  function handleFiles(files){
+    if(!files || !files.length) return;
+    const f = files[0];
+    if(!f.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      thumb.style.backgroundImage = `url(${ev.target.result})`;
+      thumb.style.backgroundSize = 'cover';
+      thumb.textContent = '';
+    };
+    reader.readAsDataURL(f);
+  }
+
+  // Guardar (simulación)
+  function doSave(addAnother=false){
+    if(!validateForm()) return;
+    // Simular guardado y limpiar si corresponde
+    save.disabled = true; saveAdd.disabled = true;
+    save.textContent = 'Guardando...';
+    setTimeout(() => {
+      save.disabled = false; saveAdd.disabled = false;
+      save.textContent = 'Guardar producto';
+      // Mensaje breve visual (temporal)
+      const msg = document.createElement('div');
+      msg.className = 'ok';
+      msg.textContent = 'Producto guardado correctamente.';
+      document.querySelector('.form-panel').insertBefore(msg, document.querySelector('.form-panel').firstChild);
+      setTimeout(()=> msg.remove(), 2500);
+
+      if(addAnother){
+        // reset campos clave
+        name.value=''; sku.value=''; qty.value=0; cost.value=0; price.value=0; marginEl.textContent='0%'; markupEl.textContent='0%';
+        thumb.style.backgroundImage='none'; thumb.textContent='PNG, JPG';
+      }
+    }, 900);
+  }
+
+  save.addEventListener('click', () => doSave(false));
+  saveAdd.addEventListener('click', () => doSave(true));
+  cancel.addEventListener('click', () => {
+    // Simular volver / limpiar
+    window.scrollTo({top:0,behavior:'smooth'});
+    const msg = document.createElement('div');
+    msg.className = 'small';
+    msg.textContent = 'Acción cancelada.';
+    document.querySelector('.form-panel').insertBefore(msg, document.querySelector('.form-panel').firstChild);
+    setTimeout(()=> msg.remove(), 1600);
+  });
+
+  // Atajos de teclado
+  window.addEventListener('keydown', (e) => {
+    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){
+      e.preventDefault(); doSave(false);
+    }
+    if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+      e.preventDefault(); doSave(true);
+    }
+  });
+
+  // Inicial
+  updateMargins();
+</script>
+</body>
+</html>
