@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MercaFácil — Reportes y Estadísticas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#071226; --bg-1:#0b1724; --card:#0b1320;
+    --accent:#00bcd4; --accent-2:#4fe6e9;
+    --muted:#94a3b8; --border:rgba(255,255,255,0.04);
+    font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,var(--bg-0),#06121a);color:#e6eef8;font-size:14px;-webkit-font-smoothing:antialiased}
+  .app{display:flex;min-height:100vh}
+  .sidebar{width:220px;background:linear-gradient(180deg,var(--bg-1),#061226);padding:22px 16px;border-right:1px solid var(--border)}
+  .brand{font-weight:800;color:var(--accent);font-size:18px;margin-bottom:16px}
+  .menu{list-style:none;padding:0;margin:0}
+  .menu li{padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+  .menu li.active{background:rgba(0,188,212,0.06);color:#fff}
+  .main{flex:1;padding:24px;display:flex;flex-direction:column;gap:18px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  .title{font-size:20px;font-weight:700}
+  .subtitle{color:var(--muted);font-size:13px}
+  .content{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid var(--border)}
+  h3{margin:0 0 10px 0;font-size:16px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .filters{display:flex;gap:8px;align-items:center}
+  select,input[type="date"]{padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:#fff}
+  .btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071226}
+  .row{display:flex;gap:12px;align-items:center}
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+  .stat{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);text-align:center}
+  .stat .num{font-weight:800;font-size:18px}
+  .panel{display:flex;flex-direction:column;gap:12px}
+  .table{width:100%;border-collapse:collapse;margin-top:8px}
+  .table th,.table td{padding:10px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.02);font-size:13px;color:#e6eef8}
+  .muted{color:var(--muted);font-size:13px}
+  .chart{height:180px;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.00));display:flex;align-items:flex-end;gap:8px}
+  .bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;align-items:center}
+  .bar > i{width:100%;border-radius:6px;background:linear-gradient(180deg,var(--accent-2),var(--accent));display:block}
+  .bar label{font-size:12px;color:var(--muted);text-align:center}
+  .alerts{display:flex;flex-direction:column;gap:8px}
+  .alert{padding:10px;border-radius:8px;background:linear-gradient(90deg,rgba(239,68,68,0.08),rgba(239,68,68,0.02));border:1px solid rgba(239,68,68,0.08);color:#ffdede}
+  .ok{padding:10px;border-radius:8px;background:linear-gradient(90deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02));border:1px solid rgba(16,185,129,0.06);color:#dfffe8}
+  .small{font-size:12px;color:var(--muted)}
+  @media (max-width:980px){
+    .content{grid-template-columns:1fr;gap:12px}
+    .sidebar{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-hidden="false">
+    <div class="brand">MercaFácil</div>
+    <ul class="menu">
+      <li>Inicio</li>
+      <li>Productos</li>
+      <li>Almacenamientos</li>
+      <li>Movimientos</li>
+      <li>Reportes</li>
+      <li class="active">Estadísticas</li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <div>
+        <div class="title">Reportes y Estadísticas</div>
+        <div class="subtitle">Stock por almacén · Productos más vendidos · Alertas de stock bajo</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">Usuario</div>
+        <div style="font-weight:700">Christopher</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <section class="card panel">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>Filtros</h3>
+          <div class="row">
+            <label class="small">Rango</label>
+            <input id="fromDate" type="date" />
+            <input id="toDate" type="date" />
+            <button id="apply" class="btn btn-primary">Aplicar</button>
+          </div>
+        </div>
+
+        <div class="stats-grid" style="margin-top:6px">
+          <div class="stat"><div class="num" id="totalStock">0</div><div class="muted">Stock total</div></div>
+          <div class="stat"><div class="num" id="lowStockCount">0</div><div class="muted">Alertas stock bajo</div></div>
+          <div class="stat"><div class="num" id="topProductsCount">0</div><div class="muted">Productos con movimiento</div></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <h3>Stock actual por almacén</h3>
+          <div class="muted">Resumen de unidades disponibles por almacén</div>
+          <table class="table" id="stockTable" style="margin-top:8px">
+            <thead>
+              <tr><th>Almacén</th><th>Capacidad</th><th>Ocupación</th><th>Disponible</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:12px">
+          <h3>Productos más vendidos (último periodo)</h3>
+          <div class="muted">Top 6 por cantidad vendida</div>
+          <div class="chart" id="topChart" style="margin-top:10px"></div>
+          <table class="table" id="topTable" style="margin-top:8px">
+            <thead><tr><th>Producto</th><th>Cantidad vendida</th><th>Ingresos</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:12px">
+          <h3>Historial rápido</h3>
+          <div class="muted">Últimos movimientos relevantes</div>
+          <div id="quickHistory" style="margin-top:8px"></div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="card">
+          <h3>Alertas de stock bajo</h3>
+          <div class="muted">Productos que requieren reposición</div>
+          <div class="alerts" id="alertsList" style="margin-top:10px"></div>
+        </div>
+
+        <div class="card">
+          <h3>Exportar</h3>
+          <div class="muted">Descarga reportes en CSV o PDF</div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <button class="btn btn-primary" id="exportCsv">Exportar CSV</button>
+            <button class="btn btn-ghost" id="exportPdf">Exportar PDF</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Configuración</h3>
+          <label>Umbral alerta (unidades)</label>
+          <input id="threshold" type="number" min="1" value="10" />
+          <div class="small" style="margin-top:8px">Productos con stock ≤ umbral aparecerán en alertas.</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Datos de ejemplo
+  const warehouses = [
+    {id:'wh1', name:'Almacén Central', capacity:1200, occupied:744},
+    {id:'wh2', name:'Sucursal Norte', capacity:800, occupied:224},
+    {id:'wh3', name:'Sucursal Sur', capacity:600, occupied:504}
+  ];
+
+  const products = [
+    {id:'p1', title:'Laptop HP 15"', stock:{wh1:15,wh2:2,wh3:0}, sold:45, revenue:562500},
+    {id:'p2', title:'Aceite de cocina 1L', stock:{wh1:120,wh2:30,wh3:10}, sold:320, revenue:14400},
+    {id:'p3', title:'Taladro 500W', stock:{wh1:8,wh2:0,wh3:0}, sold:85, revenue:102000},
+    {id:'p4', title:'Cuaderno A4', stock:{wh1:200,wh2:50,wh3:0}, sold:210, revenue:7350},
+    {id:'p5', title:'Cafetera express', stock:{wh1:5,wh2:1,wh3:0}, sold:30, revenue:69000},
+    {id:'p6', title:'Camiseta deportiva', stock:{wh1:40,wh2:10,wh3:5}, sold:150, revenue:33000}
+  ];
+
+  // Render stock table
+  function renderStock(){
+    const tbody = document.querySelector('#stockTable tbody');
+    tbody.innerHTML = '';
+    let totalStock = 0;
+    warehouses.forEach(w=>{
+      const occupied = w.occupied;
+      const available = Math.max(0, w.capacity - occupied);
+      totalStock += available;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${w.name}</td><td>${w.capacity}</td><td>${occupied}</td><td>${available}</td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('totalStock').textContent = totalStock;
+  }
+
+  // Render top-selling products (by sold)
+  function renderTopProducts(){
+    const sorted = [...products].sort((a,b)=>b.sold - a.sold).slice(0,6);
+    const tbody = document.querySelector('#topTable tbody');
+    tbody.innerHTML = '';
+    const chart = document.getElementById('topChart');
+    chart.innerHTML = '';
+    const max = Math.max(...sorted.map(s=>s.sold),1);
+    sorted.forEach(p=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${p.title}</td><td>${p.sold}</td><td>$${p.revenue.toLocaleString()}</td>`;
+      tbody.appendChild(tr);
+
+      // chart bar
+      const barWrap = document.createElement('div');
+      barWrap.className = 'bar';
+      const h = Math.round((p.sold / max) * 100);
+      const bar = document.createElement('i');
+      bar.style.height = h + '%';
+      bar.title = `${p.sold} unidades`;
+      const lbl = document.createElement('label');
+      lbl.textContent = p.title.length > 12 ? p.title.slice(0,12)+'…' : p.title;
+      barWrap.appendChild(bar);
+      barWrap.appendChild(lbl);
+      chart.appendChild(barWrap);
+    });
+    document.getElementById('topProductsCount').textContent = sorted.length;
+  }
+
+  // Quick history (sample)
+  function renderQuickHistory(){
+    const container = document.getElementById('quickHistory');
+    container.innerHTML = '';
+    const events = [
+      {text:'50 unidades Aceite 1L ingresadas', time:'hace 2h'},
+      {text:'Ajuste: -3 Taladro 500W', time:'ayer'},
+      {text:'Transferencia: 10 Cuadernos A4 (Norte → Central)', time:'2 días'}
+    ];
+    events.forEach(e=>{
+      const d = document.createElement('div');
+      d.className = 'item';
+      d.style.marginBottom = '8px';
+      d.innerHTML = `<div><strong>${e.text}</strong><div class="muted">${e.time}</div></div>`;
+      container.appendChild(d);
+    });
+  }
+
+  // Alerts: products with total stock <= threshold
+  function renderAlerts(){
+    const threshold = parseInt(document.getElementById('threshold').value) || 10;
+    const list = document.getElementById('alertsList');
+    list.innerHTML = '';
+    let count = 0;
+    products.forEach(p=>{
+      const total = Object.values(p.stock).reduce((s,v)=>s+v,0);
+      if(total <= threshold){
+        count++;
+        const el = document.createElement('div');
+        el.className = 'alert';
+        el.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><div><strong>${p.title}</strong><div class="muted">Stock total: ${total} · Umbral: ${threshold}</div></div><div style="text-align:right"><div class="small">Acciones</div><button class="btn btn-ghost" style="margin-top:6px" onclick="reorder('${p.id}')">Generar orden</button></div></div>`;
+        list.appendChild(el);
+      }
+    });
+    document.getElementById('lowStockCount').textContent = count;
+    if(count===0){
+      const ok = document.createElement('div');
+      ok.className = 'ok';
+      ok.textContent = 'No hay alertas de stock bajo.';
+      list.appendChild(ok);
+    }
+  }
+
+  // Simular "generar orden"
+  function reorder(pid){
+    const p = products.find(x=>x.id===pid);
+    if(!p) return;
+    alert(`Orden de compra generada para: ${p.title}`);
+  }
+
+  // Export (simulación)
+  document.getElementById('exportCsv').addEventListener('click', ()=>{
+    alert('Exportar CSV (simulado).');
+  });
+  document.getElementById('exportPdf').addEventListener('click', ()=>{
+    alert('Exportar PDF (simulado).');
+  });
+
+  // Apply filters (simulación: re-render)
+  document.getElementById('apply').addEventListener('click', ()=>{
+    renderStock(); renderTopProducts(); renderQuickHistory(); renderAlerts();
+  });
+
+  // Threshold change
+  document.getElementById('threshold').addEventListener('input', renderAlerts);
+
+  // Inicial
+  renderStock();
+  renderTopProducts();
+  renderQuickHistory();
+  renderAlerts();
+</script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MercaFácil — Gestión de Proveedores</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#071226; --bg-1:#0b1724; --card:#0b1320;
+    --accent:#00bcd4; --accent-2:#4fe6e9;
+    --muted:#94a3b8; --border:rgba(255,255,255,0.04);
+    font-family:"Inter",system-ui;
+  }
+  body{margin:0;background:linear-gradient(180deg,var(--bg-0),#06121a);color:#e6eef8;font-size:14px}
+  .app{display:flex;min-height:100vh}
+  .sidebar{width:220px;background:linear-gradient(180deg,var(--bg-1),#061226);padding:22px 16px;border-right:1px solid var(--border)}
+  .brand{font-weight:800;color:var(--accent);font-size:18px;margin-bottom:16px}
+  .menu{list-style:none;padding:0;margin:0}
+  .menu li{padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+  .menu li.active{background:rgba(0,188,212,0.06);color:#fff}
+  .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:18px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  .title{font-size:20px;font-weight:700}
+  .subtitle{color:var(--muted);font-size:13px}
+  .content{display:flex;gap:18px}
+  .left{flex:1;display:flex;flex-direction:column;gap:12px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid var(--border)}
+  h3{margin:0 0 10px 0;font-size:16px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input,select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:#fff}
+  .row{display:flex;gap:12px}
+  .col{flex:1}
+  .btn{padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600;border:0}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071226}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:#fff}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .item{padding:10px;border-radius:8px;background:rgba(255,255,255,0.01);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .muted{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">MercaFácil</div>
+    <ul class="menu">
+      <li>Inicio</li>
+      <li>Productos</li>
+      <li>Almacenamientos</li>
+      <li>Movimientos</li>
+      <li>Categorías</li>
+      <li class="active">Proveedores</li>
+    </ul>
+  </aside>
+  <main class="main">
+    <div class="header">
+      <div>
+        <div class="title">Gestión de Proveedores</div>
+        <div class="subtitle">Registra proveedores y asocia productos</div>
+      </div>
+      <div style="text-align:right">
+        <div class="muted">Usuario</div>
+        <div style="font-weight:700">Christopher</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="left">
+        <div class="card">
+          <h3>Nuevo proveedor</h3>
+          <div class="row">
+            <div class="col">
+              <label>Nombre</label>
+              <input id="provName" type="text" placeholder="Ej. Distribuidora ABC"/>
+            </div>
+            <div class="col">
+              <label>Teléfono</label>
+              <input id="provPhone" type="text" placeholder="Ej. +52 664 123 4567"/>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <div class="col">
+              <label>Email</label>
+              <input id="provEmail" type="text" placeholder="Ej. contacto@abc.com"/>
+            </div>
+            <div class="col">
+              <label>Dirección</label>
+              <input id="provAddress" type="text" placeholder="Calle, ciudad"/>
+            </div>
+          </div>
+          <div style="margin-top:12px;text-align:right">
+            <button class="btn btn-ghost">Cancelar</button>
+            <button class="btn btn-primary" id="addProv">Agregar proveedor</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Proveedores registrados</h3>
+          <div class="list" id="provList"></div>
+        </div>
+      </div>
+      <aside style="width:320px;display:flex;flex-direction:column;gap:12px">
+        <div class="card">
+          <h3>Asociar productos</h3>
+          <label>Proveedor</label>
+          <select id="selProv"></select>
+          <label style="margin-top:8px">Producto</label>
+          <select id="selProd">
+            <option>Laptop HP</option>
+            <option>Aceite 1L</option>
+            <option>Taladro 500W</option>
+          </select>
+          <div style="margin-top:12px;text-align:right">
+            <button class="btn btn-primary" id="addAssoc">Asociar producto</button>
+          </div>
+          <div class="list" id="assocList" style="margin-top:12px"></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+<script>
+  const provList=document.getElementById('provList');
+  const selProv=document.getElementById('selProv');
+  const assocList=document.getElementById('assocList');
+  const provs={};
+
+  document.getElementById('addProv').addEventListener('click',()=>{
+    const name=document.getElementById('provName').value.trim();
+    const phone=document.getElementById('provPhone').value.trim();
+    const email=document.getElementById('provEmail').value.trim();
+    const addr=document.getElementById('provAddress').value.trim();
+    if(!name) return;
+    provs[name]=[];
+    const item=document.createElement('div');
+    item.className='item';
+    item.innerHTML=`<div><strong>${name}</strong><div class="muted">${phone} · ${email}</div><div class="muted">${addr}</div></div><button class="btn btn-ghost btn-sm" onclick="removeProv('${name}')">Eliminar</button>`;
+    provList.appendChild(item);
+    const opt=document.createElement('option'); opt.value=name; opt.textContent=name; selProv.appendChild(opt);
+    document.getElementById('provName').value=''; document.getElementById('provPhone').value=''; document.getElementById('provEmail').value=''; document.getElementById('provAddress').value='';
+  });
+
+  function removeProv(name){
+    delete provs[name];
+    [...provList.children].forEach(c=>{if(c.innerText.includes(name)) c.remove();});
+    [...selProv.options].forEach(o=>{if(o.value===name) o.remove();});
+    assocList.innerHTML='';
+  }
+
+  document.getElementById('addAssoc').addEventListener('click',()=>{
+    const prov=selProv.value;
+    const prod=document.getElementById('selProd').value;
+    if(!prov||!prod) return;
+    provs[prov].push(prod);
+    const item=document.createElement('div');
+    item.className='item';
+    item.innerHTML=`<div>${prod}</div><button class="btn btn-ghost btn-sm" onclick="removeAssoc('${prov}','${prod}')">Eliminar</button>`;
+    assocList.appendChild(item);
+  });
+
+  function removeAssoc(prov,prod){
+    provs[prov]=provsAquí tienes el **mockup completo de Gestión de Proveedores**, terminado y funcional en HTML/CSS/JS, con el mismo estilo turquesa/oscuro que hemos usado en las demás pantallas.  
+
+```html
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MercaFácil — Gestión de Proveedores</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#071226; --bg-1:#0b1724; --card:#0b1320;
+    --accent:#00bcd4; --accent-2:#4fe6e9;
+    --muted:#94a3b8; --border:rgba(255,255,255,0.04);
+    font-family:"Inter",system-ui;
+  }
+  body{margin:0;background:linear-gradient(180deg,var(--bg-0),#06121a);color:#e6eef8;font-size:14px}
+  .app{display:flex;min-height:100vh}
+  .sidebar{width:220px;background:linear-gradient(180deg,var(--bg-1),#061226);padding:22px 16px;border-right:1px solid var(--border)}
+  .brand{font-weight:800;color:var(--accent);font-size:18px;margin-bottom:16px}
+  .menu{list-style:none;padding:0;margin:0}
+  .menu li{padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+  .menu li.active{background:rgba(0,188,212,0.06);color:#fff}
+  .main{flex:1;padding:28px;display:flex;flex-direction:column;gap:18px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  .title{font-size:20px;font-weight:700}
+  .subtitle{color:var(--muted);font-size:13px}
+  .content{display:flex;gap:18px}
+  .left{flex:1;display:flex;flex-direction:column;gap:12px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid var(--border)}
+  h3{margin:0 0 10px 0;font-size:16px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input,select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:#fff}
+  .row{display:flex;gap:12px}
+  .col{flex:1}
+  .btn{padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600;border:0}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071226}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:#fff}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .item{padding:10px;border-radius:8px;background:rgba(255,255,255,0.01);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .muted{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">MercaFácil</div>
+    <ul class="menu">
+      <li>Inicio</li>
+      <li>Productos</li>
+      <li>Almacenamientos</li>
+      <li>Movimientos</li>
+      <li>Categorías</li>
+      <li class="active">Proveedores</li>
+    </ul>
+  </aside>
+  <main class="main">
+    <div class="header">
+      <div>
+        <div class="title">Gestión de Proveedores</div>
+        <div class="subtitle">Registra proveedores y asocia productos</div>
+      </div>
+      <div style="text-align:right">
+        <div class="muted">Usuario</div>
+        <div style="font-weight:700">Christopher</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="left">
+        <div class="card">
+          <h3>Nuevo proveedor</h3>
+          <div class="row">
+            <div class="col">
+              <label>Nombre</label>
+              <input id="provName" type="text" placeholder="Ej. Distribuidora ABC"/>
+            </div>
+            <div class="col">
+              <label>Teléfono</label>
+              <input id="provPhone" type="text" placeholder="Ej. +52 664 123 4567"/>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <div class="col">
+              <label>Email</label>
+              <input id="provEmail" type="text" placeholder="Ej. contacto@abc.com"/>
+            </div>
+            <div class="col">
+              <label>Dirección</label>
+              <input id="provAddress" type="text" placeholder="Calle, ciudad"/>
+            </div>
+          </div>
+          <div style="margin-top:12px;text-align:right">
+            <button class="btn btn-ghost">Cancelar</button>
+            <button class="btn btn-primary" id="addProv">Agregar proveedor</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Proveedores registrados</h3>
+          <div class="list" id="provList"></div>
+        </div>
+      </div>
+      <aside style="width:320px;display:flex;flex-direction:column;gap:12px">
+        <div class="card">
+          <h3>Asociar productos</h3>
+          <label>Proveedor</label>
+          <select id="selProv"></select>
+          <label style="margin-top:8px">Producto</label>
+          <select id="selProd">
+            <option>Laptop HP</option>
+            <option>Aceite 1L</option>
+            <option>Taladro 500W</option>
+          </select>
+          <div style="margin-top:12px;text-align:right">
+            <button class="btn btn-primary" id="addAssoc">Asociar producto</button>
+          </div>
+          <div class="list" id="assocList" style="margin-top:12px"></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+<script>
+  const provList=document.getElementById('provList');
+  const selProv=document.getElementById('selProv');
+  const assocList=document.getElementById('assocList');
+  const provs={};
+
+  document.getElementById('addProv').addEventListener('click',()=>{
+    const name=document.getElementById('provName').value.trim();
+    const phone=document.getElementById('provPhone').value.trim();
+    const email=document.getElementById('provEmail').value.trim();
+    const addr=document.getElementById('provAddress').value.trim();
+    if(!name) return;
+    provs[name]=[];
+    const item=document.createElement('div');
+    item.className='item';
+    item.innerHTML=`<div><strong>${name}</strong><div class="muted">${phone} · ${email}</div><div class="muted">${addr}</div></div><button class="btn btn-ghost btn-sm" onclick="removeProv('${name}')">Eliminar</button>`;
+    provList.appendChild(item);
+    const opt=document.createElement('option'); opt.value=name; opt.textContent=name; selProv.appendChild(opt);
+    document.getElementById('provName').value=''; document.getElementById('provPhone').value=''; document.getElementById('provEmail').value=''; document.getElementById('provAddress').value='';
+  });
+
+  function removeProv(name){
+    delete provs[name];
+    [...provList.children].forEach(c=>{if(c.innerText.includes(name)) c.remove();});
+    [...selProv.options].forEach(o=>{if(o.value===name) o.remove();});
+    assocList.innerHTML='';
+  }
+
+  document.getElementById('addAssoc').addEventListener('click',()=>{
+    const prov=selProv.value;
+    const prod=document.getElementById('selProd').value;
+    if(!prov||!prod) return;
+    provs[prov].push(prod);
+    const item=document.createElement('div');
+    item.className='item';
+    item.innerHTML=`<div>${prod}</div><button class="btn btn-ghost btn-sm" onclick="removeAssoc('${prov}','${prod}')">Eliminar</button>`;
+    assocList.appendChild(item);
+  });
+
+  function removeAssoc(prov,prod){
+    provs[prov]=provs

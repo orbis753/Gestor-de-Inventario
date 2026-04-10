@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MercaFácil — Configuración general</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#071226; --bg-1:#0b1724; --card:#0b1320;
+    --accent:#00bcd4; --accent-2:#4fe6e9;
+    --muted:#94a3b8; --border:rgba(255,255,255,0.04);
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background:linear-gradient(180deg,var(--bg-0),#06121a);
+    color:#e6eef8;font-size:14px;-webkit-font-smoothing:antialiased;
+  }
+
+  .app{display:flex;min-height:100vh}
+  .sidebar{
+    width:220px;background:linear-gradient(180deg,var(--bg-1),#061226);
+    padding:22px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:14px;
+  }
+  .brand{font-weight:800;color:var(--accent);font-size:18px}
+  .menu{list-style:none;padding:0;margin:0}
+  .menu li{padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+  .menu li.active{background:rgba(0,188,212,0.06);color:#fff}
+
+  .main{flex:1;padding:24px;display:flex;flex-direction:column;gap:18px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  .title{font-size:20px;font-weight:700}
+  .subtitle{color:var(--muted);font-size:13px}
+
+  .grid{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid var(--border)}
+  h3{margin:0 0 10px 0;font-size:16px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:#fff;outline:none}
+  textarea{min-height:80px}
+  .row{display:flex;gap:12px}
+  .col{flex:1}
+  .btn{padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600;border:0}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071226}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:#fff}
+  .muted{color:var(--muted);font-size:13px}
+  .small{font-size:12px;color:var(--muted)}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .unit-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:rgba(255,255,255,0.01);border:1px solid var(--border)}
+  .logo-preview{width:120px;height:60px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#071226;font-weight:800}
+  .toggle{display:inline-flex;align-items:center;gap:8px}
+  .chip{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted);font-size:13px}
+  .table{width:100%;border-collapse:collapse;margin-top:8px}
+  .table th,.table td{padding:10px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.02);font-size:13px;color:#e6eef8}
+  @media (max-width:980px){
+    .grid{grid-template-columns:1fr;gap:12px}
+    .sidebar{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-hidden="false">
+    <div class="brand">MercaFácil</div>
+    <ul class="menu">
+      <li>Inicio</li>
+      <li>Productos</li>
+      <li>Almacenamientos</li>
+      <li>Movimientos</li>
+      <li>Reportes</li>
+      <li>Usuarios</li>
+      <li class="active">Configuración</li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <div>
+        <div class="title">Configuración general</div>
+        <div class="subtitle">Monedas, unidades, alertas y personalización básica</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">Usuario</div>
+        <div style="font-weight:700">Christopher</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <h3>Monedas</h3>
+        <div class="muted">Define monedas disponibles y la moneda por defecto</div>
+        <div style="margin-top:10px" class="row">
+          <div class="col">
+            <label>Moneda por defecto</label>
+            <select id="defaultCurrency">
+              <option value="MXN">MXN - Peso mexicano</option>
+              <option value="USD">USD - Dólar estadounidense</option>
+              <option value="EUR">EUR - Euro</option>
+            </select>
+          </div>
+          <div style="width:160px">
+            <label>Formato</label>
+            <select id="currencyFormat">
+              <option>1,234.56</option>
+              <option>1.234,56</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <label>Monedas activas</label>
+          <div class="list" id="currencyList" style="margin-top:8px">
+            <!-- dinámico -->
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <input id="newCurrency" placeholder="Código (p.ej. GBP)" />
+            <button id="addCurrency" class="btn btn-primary">Agregar</button>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px dashed rgba(255,255,255,0.03);margin:16px 0">
+
+        <h3>Unidades de medida</h3>
+        <div class="muted">Define unidades y su abreviatura</div>
+        <div style="margin-top:10px" class="row">
+          <div class="col">
+            <label>Nombre unidad</label>
+            <input id="unitName" placeholder="Ej. kilogramo" />
+          </div>
+          <div style="width:120px">
+            <label>Abreviatura</label>
+            <input id="unitAbbr" placeholder="kg" />
+          </div>
+          <div style="width:120px;display:flex;align-items:flex-end">
+            <button id="addUnit" class="btn btn-primary" style="width:100%">Agregar</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" id="unitList" class="list"></div>
+
+        <hr style="border:none;border-top:1px dashed rgba(255,255,255,0.03);margin:16px 0">
+
+        <h3>Parámetros de alertas</h3>
+        <div class="muted">Stock mínimo y caducidad</div>
+        <div style="margin-top:10px" class="row">
+          <div class="col">
+            <label>Umbral stock mínimo (unidades)</label>
+            <input id="globalMinStock" type="number" min="0" value="10" />
+          </div>
+          <div style="width:180px">
+            <label>Notificar antes de caducidad (días)</label>
+            <input id="expiryNotifyDays" type="number" min="0" value="30" />
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Reglas de alertas</label>
+          <div class="muted" style="margin-top:6px">Activa o desactiva tipos de alerta</div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <div class="chip"><input id="alertLowStock" type="checkbox" checked /> <span style="margin-left:8px">Stock bajo</span></div>
+            <div class="chip"><input id="alertExpiry" type="checkbox" checked /> <span style="margin-left:8px">Caducidad próxima</span></div>
+            <div class="chip"><input id="alertNegative" type="checkbox" /> <span style="margin-left:8px">Stock negativo</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;text-align:right">
+          <button id="resetDefaults" class="btn btn-ghost">Restablecer</button>
+          <button id="saveConfig" class="btn btn-primary">Guardar configuración</button>
+        </div>
+      </section>
+
+      <aside>
+        <div class="card">
+          <h3>Personalización básica</h3>
+          <div class="muted">Logo, nombre de empresa y datos visibles en la app</div>
+
+          <div style="margin-top:12px;display:flex;gap:12px;align-items:center">
+            <div class="logo-preview" id="logoPreview">MF</div>
+            <div style="flex:1">
+              <label>Nombre de la empresa</label>
+              <input id="companyName" placeholder="MercaFácil S.A. de C.V." />
+              <label style="margin-top:8px">Subtítulo / Slogan</label>
+              <input id="companyTag" placeholder="Gestión simple de inventarios" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>Subir logo</label>
+            <input id="logoFile" type="file" accept="image/*" />
+            <div class="small" style="margin-top:8px">Formato PNG/JPG. Se mostrará en cabeceras y PDF exportados.</div>
+          </div>
+
+          <hr style="border:none;border-top:1px dashed rgba(255,255,255,0.03);margin:12px 0">
+
+          <h3>Preferencias</h3>
+          <label>Zona horaria</label>
+          <select id="timezone">
+            <option>America/Tijuana</option>
+            <option>America/Mexico_City</option>
+            <option>UTC</option>
+          </select>
+          <label style="margin-top:8px">Formato de fecha</label>
+          <select id="dateFormat">
+            <option>DD/MM/YYYY</option>
+            <option>MM/DD/YYYY</option>
+            <option>YYYY-MM-DD</option>
+          </select>
+        </div>
+
+        <div class="card">
+          <h3>Vista previa y acciones</h3>
+          <div class="muted">Simula cómo se verán los cambios</div>
+          <div style="margin-top:10px">
+            <button id="previewBtn" class="btn btn-primary" style="width:100%">Vista previa</button>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <button id="exportSettings" class="btn btn-ghost" style="flex:1">Exportar JSON</button>
+            <button id="importSettings" class="btn btn-ghost" style="flex:1">Importar JSON</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Estado inicial
+  const currencies = ['MXN','USD','EUR'];
+  const units = [{name:'pieza',abbr:'pz'},{name:'kilogramo',abbr:'kg'},{name:'litro',abbr:'L'}];
+
+  const currencyList = document.getElementById('currencyList');
+  const unitList = document.getElementById('unitList');
+
+  function renderCurrencies(){
+    currencyList.innerHTML = '';
+    currencies.forEach(c=>{
+      const el = document.createElement('div');
+      el.className = 'unit-item';
+      el.innerHTML = `<div style="font-weight:700">${c}</div><div><button class="btn btn-ghost" onclick="removeCurrency('${c}')">Eliminar</button></div>`;
+      currencyList.appendChild(el);
+    });
+    document.getElementById('defaultCurrency').value = currencies[0] || 'MXN';
+  }
+
+  function renderUnits(){
+    unitList.innerHTML = '';
+    units.forEach((u,idx)=>{
+      const el = document.createElement('div');
+      el.className = 'unit-item';
+      el.innerHTML = `<div><strong>${u.name}</strong><div class="muted">${u.abbr}</div></div><div><button class="btn btn-ghost" onclick="removeUnit(${idx})">Eliminar</button></div>`;
+      unitList.appendChild(el);
+    });
+  }
+
+  // Agregar moneda
+  document.getElementById('addCurrency').addEventListener('click', ()=>{
+    const v = document.getElementById('newCurrency').value.trim().toUpperCase();
+    if(!v) return;
+    if(!currencies.includes(v)) currencies.push(v);
+    document.getElementById('newCurrency').value='';
+    renderCurrencies();
+  });
+
+  function removeCurrency(code){
+    const idx = currencies.indexOf(code);
+    if(idx>-1) currencies.splice(idx,1);
+    renderCurrencies();
+  }
+
+  // Unidades
+  document.getElementById('addUnit').addEventListener('click', ()=>{
+    const name = document.getElementById('unitName').value.trim();
+    const abbr = document.getElementById('unitAbbr').value.trim();
+    if(!name||!abbr) return;
+    units.push({name,abbr});
+    document.getElementById('unitName').value=''; document.getElementById('unitAbbr').value='';
+    renderUnits();
+  });
+
+  function removeUnit(i){
+    units.splice(i,1);
+    renderUnits();
+  }
+
+  // Logo preview
+  const logoFile = document.getElementById('logoFile');
+  const logoPreview = document.getElementById('logoPreview');
+  logoFile.addEventListener('change', (e)=>{
+    const f = e.target.files && e.target.files[0];
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      logoPreview.style.backgroundImage = `url(${ev.target.result})`;
+      logoPreview.style.backgroundSize = 'cover';
+      logoPreview.textContent = '';
+    };
+    reader.readAsDataURL(f);
+  });
+
+  // Guardar configuración (simulado)
+  document.getElementById('saveConfig').addEventListener('click', ()=>{
+    const cfg = {
+      defaultCurrency: document.getElementById('defaultCurrency').value,
+      currencyFormat: document.getElementById('currencyFormat').value,
+      currencies,
+      units,
+      globalMinStock: parseInt(document.getElementById('globalMinStock').value)||0,
+      expiryNotifyDays: parseInt(document.getElementById('expiryNotifyDays').value)||0,
+      alerts: {
+        lowStock: document.getElementById('alertLowStock').checked,
+        expiry: document.getElementById('alertExpiry').checked,
+        negative: document.getElementById('alertNegative').checked
+      },
+      companyName: document.getElementById('companyName').value,
+      companyTag: document.getElementById('companyTag').value,
+      timezone: document.getElementById('timezone').value,
+      dateFormat: document.getElementById('dateFormat').value
+    };
+    const msg = document.createElement('div');
+    msg.className = 'small';
+    msg.textContent = 'Configuración guardada.';
+    document.querySelector('.card').prepend(msg);
+    setTimeout(()=> msg.remove(),2000);
+    console.log('Configuración guardada (simulado):', cfg);
+  });
+
+  // Preview
+  document.getElementById('previewBtn').addEventListener('click', ()=>{
+    const name = document.getElementById('companyName').value || 'MercaFácil';
+    alert(`Vista previa (simulada): ${name}`);
+  });
+
+  // Export / Import (simulado)
+  document.getElementById('exportSettings').addEventListener('click', ()=>{
+    const data = {currencies,units};
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'merca_config.json'; a.click();
+    URL.revokeObjectURL(url);
+  });
+  document.getElementById('importSettings').addEventListener('click', ()=>{
+    alert('Importar configuración (simulado). Selecciona un archivo JSON con la estructura esperada.');
+  });
+
+  // Reset defaults
+  document.getElementById('resetDefaults').addEventListener('click', ()=>{
+    if(!confirm('Restablecer valores por defecto?')) return;
+    currencies.splice(0,currencies.length, 'MXN','USD','EUR');
+    units.splice(0,units.length, {name:'pieza',abbr:'pz'},{name:'kilogramo',abbr:'kg'},{name:'litro',abbr:'L'});
+    document.getElementById('globalMinStock').value = 10;
+    document.getElementById('expiryNotifyDays').value = 30;
+    renderCurrencies(); renderUnits(); renderAlertsPreview();
+  });
+
+  // Alerts preview helper
+  function renderAlertsPreview(){
+    // placeholder: in a real system this would query products
+    // here we just ensure UI consistency
+  }
+
+  // Inicializar
+  renderCurrencies();
+  renderUnits();
+  renderAlertsPreview();
+</script>
+</body>
+</html>

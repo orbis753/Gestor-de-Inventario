@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MercaFácil — Usuarios y Roles</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#071226; --bg-1:#0b1724; --card:#0b1320;
+    --accent:#00bcd4; --accent-2:#4fe6e9;
+    --muted:#94a3b8; --border:rgba(255,255,255,0.04);
+    font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background: linear-gradient(180deg,var(--bg-0) 0%, #06121a 100%);
+    color:#e6eef8; font-size:14px; -webkit-font-smoothing:antialiased;
+  }
+  .app{display:flex;min-height:100vh}
+  .sidebar{width:220px;background:linear-gradient(180deg,var(--bg-1),#061226);padding:22px 16px;border-right:1px solid var(--border)}
+  .brand{font-weight:800;color:var(--accent);font-size:18px;margin-bottom:16px}
+  .menu{list-style:none;padding:0;margin:0}
+  .menu li{padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+  .menu li.active{background:rgba(0,188,212,0.06);color:#fff}
+  .main{flex:1;padding:24px;display:flex;flex-direction:column;gap:18px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  .title{font-size:20px;font-weight:700}
+  .subtitle{color:var(--muted);font-size:13px}
+  .content{display:flex;gap:18px;align-items:flex-start}
+  .left{flex:1;display:flex;flex-direction:column;gap:12px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid var(--border)}
+  h3{margin:0 0 10px 0;font-size:16px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:#fff;outline:none}
+  textarea{min-height:80px}
+  .row{display:flex;gap:12px}
+  .col{flex:1}
+  .btn{padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600;border:0}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071226}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:#fff}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .user-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:rgba(255,255,255,0.01);border:1px solid var(--border)}
+  .muted{color:var(--muted);font-size:13px}
+  .role-badge{padding:6px 8px;border-radius:999px;background:rgba(0,188,212,0.08);color:var(--accent);font-weight:700;font-size:13px}
+  .perm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .perm-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:rgba(255,255,255,0.01);border:1px solid var(--border)}
+  .switch{position:relative;width:44px;height:24px;background:rgba(255,255,255,0.04);border-radius:999px;cursor:pointer}
+  .switch i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:all .15s ease}
+  .switch.on{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+  .switch.on i{left:22px}
+  .small{font-size:12px;color:var(--muted)}
+  @media (max-width:980px){
+    .content{flex-direction:column}
+    .sidebar{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-hidden="false">
+    <div class="brand">MercaFácil</div>
+    <ul class="menu">
+      <li>Inicio</li>
+      <li>Productos</li>
+      <li>Almacenamientos</li>
+      <li>Movimientos</li>
+      <li>Reportes</li>
+      <li class="active">Usuarios</li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <div>
+        <div class="title">Usuarios y Roles</div>
+        <div class="subtitle">Administra usuarios, roles y permisos por módulo</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">Usuario</div>
+        <div style="font-weight:700">Christopher</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <section class="left">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3>Usuarios</h3>
+            <div style="display:flex;gap:8px">
+              <input id="searchUser" type="text" placeholder="Buscar usuario..." style="width:220px;padding:8px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:#fff" />
+              <button id="newUserBtn" class="btn btn-primary">Nuevo usuario</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" id="userList" class="list">
+            <!-- usuarios generados por JS -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Roles definidos</h3>
+          <div class="muted">Roles base: Administrador, Operador, Consulta</div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <div class="role-badge">Administrador</div>
+            <div class="role-badge" style="background:rgba(255,255,255,0.02);color:var(--muted)">Operador</div>
+            <div class="role-badge" style="background:rgba(255,255,255,0.02);color:var(--muted)">Consulta</div>
+          </div>
+          <div class="small" style="margin-top:10px">Puedes crear roles personalizados en configuración avanzada.</div>
+        </div>
+      </section>
+
+      <aside style="width:420px;display:flex;flex-direction:column;gap:12px">
+        <div class="card" id="editorCard" style="display:none">
+          <h3 id="editorTitle">Nuevo usuario</h3>
+          <label>Nombre completo</label>
+          <input id="uName" type="text" placeholder="Nombre y apellido" />
+          <label style="margin-top:8px">Email</label>
+          <input id="uEmail" type="text" placeholder="usuario@empresa.com" />
+          <div class="row" style="margin-top:8px">
+            <div class="col">
+              <label>Rol</label>
+              <select id="uRole">
+                <option>Administrador</option>
+                <option>Operador</option>
+                <option>Consulta</option>
+              </select>
+            </div>
+            <div style="width:140px">
+              <label>Activo</label>
+              <div id="uActive" class="switch on" style="margin-top:6px"><i></i></div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label>Permisos por módulo</label>
+            <div class="perm-grid" id="permGrid">
+              <!-- permisos generados por JS -->
+            </div>
+            <div class="small" style="margin-top:8px">Activa o desactiva permisos específicos para este usuario.</div>
+          </div>
+
+          <div style="margin-top:12px;text-align:right">
+            <button id="cancelEdit" class="btn btn-ghost">Cancelar</button>
+            <button id="saveUser" class="btn btn-primary">Guardar usuario</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Permisos globales</h3>
+          <div class="muted">Define permisos por módulo que pueden aplicarse a roles</div>
+          <div style="margin-top:10px" id="rolePerms">
+            <!-- role permissions summary -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Atajos y acciones</h3>
+          <div class="small">Ctrl+N = Nuevo usuario · Ctrl+S = Guardar usuario</div>
+          <div style="margin-top:8px" class="small">Sugerencia: asigna roles antes de crear usuarios para aplicar permisos por defecto.</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Módulos del sistema
+  const MODULES = ['Productos','Almacenamientos','Movimientos','Reportes','Categorías','Proveedores','Usuarios'];
+
+  // Roles por defecto con permisos (true = acceso completo)
+  const ROLES = {
+    'Administrador': MODULES.reduce((a,m)=>{a[m]=true;return a},{ }),
+    'Operador': {'Productos':true,'Almacenamientos':true,'Movimientos':true,'Reportes':false,'Categorías':false,'Proveedores':false,'Usuarios':false},
+    'Consulta': MODULES.reduce((a,m)=>{a[m]= (m==='Reportes' || m==='Productos');return a},{ })
+  };
+
+  // Usuarios de ejemplo
+  const users = [
+    {id:'u1', name:'Ana López', email:'ana@merca.com', role:'Administrador', active:true},
+    {id:'u2', name:'Luis Pérez', email:'luis@merca.com', role:'Operador', active:true},
+    {id:'u3', name:'María Ruiz', email:'maria@merca.com', role:'Consulta', active:false}
+  ];
+
+  // Estado editor
+  let editing = null;
+  const userList = document.getElementById('userList');
+  const editorCard = document.getElementById('editorCard');
+  const editorTitle = document.getElementById('editorTitle');
+  const uName = document.getElementById('uName');
+  const uEmail = document.getElementById('uEmail');
+  const uRole = document.getElementById('uRole');
+  const uActive = document.getElementById('uActive');
+  const permGrid = document.getElementById('permGrid');
+  const rolePerms = document.getElementById('rolePerms');
+
+  // Render lista de usuarios
+  function renderUsers(filter=''){
+    userList.innerHTML = '';
+    const q = filter.trim().toLowerCase();
+    users.forEach(u=>{
+      if(q && !(u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q))) return;
+      const el = document.createElement('div');
+      el.className = 'user-item';
+      el.innerHTML = `<div>
+                        <div style="display:flex;gap:10px;align-items:center">
+                          <div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#071226">${u.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</div>
+                          <div>
+                            <div style="font-weight:700">${u.name} <span style="margin-left:8px" class="small">${u.email}</span></div>
+                            <div class="muted">Rol: <strong style="color:#fff">${u.role}</strong> · <span class="small">${u.active? 'Activo':'Inactivo'}</span></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style="display:flex;gap:8px;align-items:center">
+                        <div class="role-badge">${u.role}</div>
+                        <button class="btn btn-ghost" onclick="editUser('${u.id}')">Editar</button>
+                        <button class="btn btn-ghost" onclick="deleteUser('${u.id}')">Eliminar</button>
+                      </div>`;
+      userList.appendChild(el);
+    });
+  }
+
+  // Render permisos por rol (resumen)
+  function renderRolePerms(){
+    rolePerms.innerHTML = '';
+    Object.keys(ROLES).forEach(r=>{
+      const box = document.createElement('div');
+      box.style.marginBottom = '8px';
+      box.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700">${r}</div><div class="small">Permisos por módulo</div></div>`;
+      const grid = document.createElement('div');
+      grid.style.display='grid'; grid.style.gridTemplateColumns='repeat(2,1fr)'; grid.style.gap='6px'; grid.style.marginTop='8px';
+      MODULES.forEach(m=>{
+        const p = document.createElement('div');
+        p.className='perm-item';
+        p.innerHTML = `<div class="small">${m}</div><div class="small">${ROLES[r][m] ? '✔' : '—'}</div>`;
+        grid.appendChild(p);
+      });
+      box.appendChild(grid);
+      rolePerms.appendChild(box);
+    });
+  }
+
+  // Abrir editor para nuevo usuario
+  document.getElementById('newUserBtn').addEventListener('click', ()=>{
+    editing = null;
+    editorTitle.textContent = 'Nuevo usuario';
+    uName.value=''; uEmail.value=''; uRole.value='Operador';
+    setActiveSwitch(true);
+    buildPermGrid(ROLES[uRole.value]);
+    editorCard.style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  // Construir grid de permisos (checkbox-like switches)
+  function buildPermGrid(basePerms){
+    permGrid.innerHTML = '';
+    MODULES.forEach(m=>{
+      const div = document.createElement('div');
+      div.className='perm-item';
+      const sw = document.createElement('div');
+      sw.className = 'switch ' + (basePerms && basePerms[m] ? 'on' : '');
+      sw.innerHTML = '<i></i>';
+      sw.addEventListener('click', ()=> sw.classList.toggle('on'));
+      div.innerHTML = `<div class="small">${m}</div>`;
+      div.appendChild(sw);
+      permGrid.appendChild(div);
+    });
+  }
+
+  // Set active switch state
+  function setActiveSwitch(state){
+    if(state) uActive.classList.add('on'); else uActive.classList.remove('on');
+  }
+  uActive.addEventListener('click', ()=> uActive.classList.toggle('on'));
+
+  // Guardar usuario (simulado)
+  document.getElementById('saveUser').addEventListener('click', ()=>{
+    const name = uName.value.trim(); const email = uEmail.value.trim(); const role = uRole.value;
+    if(!name || !email) { alert('Nombre y email son obligatorios'); return; }
+    const perms = {};
+    [...permGrid.children].forEach((p,i)=> perms[MODULES[i]] = p.querySelector('.switch').classList.contains('on'));
+    if(editing){
+      const u = users.find(x=>x.id===editing);
+      u.name = name; u.email = email; u.role = role; u.active = uActive.classList.contains('on');
+      // (en un sistema real, guardar permisos por usuario)
+    } else {
+      const id = 'u' + (Date.now().toString().slice(-5));
+      users.push({id,name,email,role,active:uActive.classList.contains('on')});
+    }
+    editorCard.style.display='none';
+    renderUsers(document.getElementById('searchUser').value);
+    renderRolePerms();
+  });
+
+  document.getElementById('cancelEdit').addEventListener('click', ()=> editorCard.style.display='none');
+
+  // Editar usuario
+  function editUser(id){
+    const u = users.find(x=>x.id===id); if(!u) return;
+    editing = id;
+    editorTitle.textContent = 'Editar usuario';
+    uName.value = u.name; uEmail.value = u.email; uRole.value = u.role;
+    setActiveSwitch(u.active);
+    // base perms from role
+    buildPermGrid(ROLES[u.role]);
+    editorCard.style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  window.editUser = editUser;
+
+  // Eliminar usuario
+  function deleteUser(id){
+    const idx = users.findIndex(x=>x.id===id); if(idx===-1) return;
+    if(!confirm('Eliminar usuario?')) return;
+    users.splice(idx,1);
+    renderUsers(document.getElementById('searchUser').value);
+  }
+  window.deleteUser = deleteUser;
+
+  // Asociar búsqueda
+  document.getElementById('searchUser').addEventListener('input',(e)=> renderUsers(e.target.value));
+
+  // Atajos
+  window.addEventListener('keydown',(e)=>{
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='n'){ e.preventDefault(); document.getElementById('newUserBtn').click(); }
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ if(editorCard.style.display==='block'){ e.preventDefault(); document.getElementById('saveUser').click(); } }
+  });
+
+  // Inicial
+  renderUsers();
+  renderRolePerms();
+</script>
+</body>
+</html>

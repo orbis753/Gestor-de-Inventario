@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MercaFácil — Iniciar sesión</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#071226;
+    --bg-1:#0b1724;
+    --card:#0b1320;
+    --accent:#00bcd4;
+    --accent-2:#4fe6e9;
+    --muted:#94a3b8;
+    --glass:rgba(255,255,255,0.03);
+    --border:rgba(255,255,255,0.04);
+    --danger:#ef4444;
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background:linear-gradient(180deg,var(--bg-0),#06121a);
+    color:#e6eef8;display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;font-size:14px;
+  }
+
+  .login-wrap{width:100%;max-width:980px;padding:28px;display:flex;gap:28px;align-items:center;justify-content:center}
+  .left-panel{flex:1;display:flex;flex-direction:column;gap:18px}
+  .right-panel{width:420px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:22px;border-radius:12px;border:1px solid var(--border)}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#071226;font-weight:800;font-size:20px}
+  .app-title{font-weight:800;font-size:20px}
+  .app-sub{color:var(--muted);font-size:13px}
+
+  h2{margin:0 0 6px 0}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input[type="text"], input[type="password"], select{
+    width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color:#fff;outline:none;font-size:14px;
+  }
+  .row{display:flex;gap:10px}
+  .col{flex:1}
+  .actions{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+  .btn{padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#071226}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:#fff}
+  .small{font-size:12px;color:var(--muted)}
+  .muted{color:var(--muted)}
+  .helper{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .remember{display:flex;gap:8px;align-items:center}
+  .link{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600}
+  .socials{display:flex;gap:8px;margin-top:12px}
+  .social-btn{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.01);color:#fff;cursor:pointer}
+  .divider{height:1px;background:rgba(255,255,255,0.02);margin:12px 0;border-radius:2px}
+  .error{color:var(--danger);font-size:13px;margin-top:8px}
+  .note{font-size:12px;color:var(--muted);margin-top:10px}
+
+  /* Responsive */
+  @media (max-width:900px){
+    .login-wrap{padding:18px;flex-direction:column}
+    .left-panel{display:none}
+    .right-panel{width:100%}
+  }
+</style>
+</head>
+<body>
+  <div class="login-wrap" role="main">
+    <div class="left-panel" aria-hidden="true">
+      <div class="brand">
+        <div class="logo">MF</div>
+        <div>
+          <div class="app-title">MercaFácil</div>
+          <div class="app-sub">Gestión simple de inventarios</div>
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:16px;border-radius:10px;border:1px solid var(--border)">
+        <h3 style="margin:0 0 8px 0">Bienvenido de nuevo</h3>
+        <div class="muted">Accede con tu cuenta para gestionar productos, almacenes y movimientos. Si no tienes cuenta, solicita acceso al administrador.</div>
+      </div>
+
+      <div style="display:grid;gap:10px">
+        <div style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid var(--border)">
+          <div style="font-weight:700">Consejo rápido</div>
+          <div class="muted" style="margin-top:6px">Usa Ctrl+S para guardar formularios en el panel de administración.</div>
+        </div>
+        <div style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid var(--border)">
+          <div style="font-weight:700">Demo</div>
+          <div class="muted" style="margin-top:6px">Usuario: demo@merca.com · Contraseña: demo123</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-panel" role="form" aria-labelledby="loginTitle">
+      <h2 id="loginTitle">Iniciar sesión</h2>
+      <div class="muted">Introduce tus credenciales para continuar</div>
+
+      <div style="margin-top:12px">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="text" placeholder="usuario@empresa.com" autocomplete="username" />
+      </div>
+
+      <div style="margin-top:10px">
+        <label for="password">Contraseña</label>
+        <div style="position:relative">
+          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+          <button id="togglePwd" aria-label="Mostrar contraseña" style="position:absolute;right:8px;top:8px;background:transparent;border:0;color:var(--muted);cursor:pointer">👁️</button>
+        </div>
+      </div>
+
+      <div class="helper">
+        <div class="remember">
+          <input id="remember" type="checkbox" />
+          <label for="remember" class="small">Recordarme</label>
+        </div>
+        <a class="link" id="forgot">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <div class="actions">
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="lang" aria-label="Idioma" style="padding:8px;border-radius:8px;border:1px solid var(--border);background:transparent;color:#fff">
+            <option value="es">ES</option>
+            <option value="en">EN</option>
+          </select>
+          <div class="small muted" style="margin-left:6px">Idioma</div>
+        </div>
+        <div>
+          <button id="loginBtn" class="btn btn-primary">Entrar</button>
+        </div>
+      </div>
+
+      <div class="divider" role="separator"></div>
+
+      <div class="socials">
+        <button class="social-btn">Iniciar con Google</button>
+        <button class="social-btn">Iniciar con Microsoft</button>
+      </div>
+
+      <div class="note">Al iniciar aceptas las políticas de uso de la plataforma.</div>
+
+      <div id="msg" class="error" style="display:none"></div>
+
+      <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+        <div class="small muted">¿No tienes cuenta?</div>
+        <button id="requestAccess" class="btn btn-ghost">Solicitar acceso</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const togglePwd = document.getElementById('togglePwd');
+  const loginBtn = document.getElementById('loginBtn');
+  const msg = document.getElementById('msg');
+  const forgot = document.getElementById('forgot');
+
+  togglePwd.addEventListener('click', () => {
+    const t = password.type === 'password' ? 'text' : 'password';
+    password.type = t;
+    togglePwd.textContent = t === 'text' ? '🙈' : '👁️';
+  });
+
+  function validate(){
+    msg.style.display = 'none';
+    if(!email.value.trim()){
+      showError('Ingresa tu correo electrónico.');
+      return false;
+    }
+    if(!password.value.trim()){
+      showError('Ingresa tu contraseña.');
+      return false;
+    }
+    return true;
+  }
+
+  function showError(text){
+    msg.textContent = text;
+    msg.style.display = 'block';
+  }
+
+  loginBtn.addEventListener('click', () => {
+    if(!validate()) return;
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Validando...';
+    // Simulación de autenticación
+    setTimeout(() => {
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Entrar';
+      // Demo: credenciales de ejemplo
+      const demoEmail = 'demo@merca.com';
+      const demoPwd = 'demo123';
+      if(email.value.trim() === demoEmail && password.value === demoPwd){
+        msg.style.display = 'none';
+        alert('Inicio de sesión exitoso (simulado). Redirigiendo al dashboard...');
+        // En una app real: redirigir a /dashboard
+      } else {
+        showError('Credenciales incorrectas. Usa demo@merca.com / demo123 para probar.');
+      }
+    }, 900);
+  });
+
+  // Enter para enviar
+  [email, password].forEach(el => el.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') loginBtn.click();
+  }));
+
+  forgot.addEventListener('click', () => {
+    alert('Flujo de recuperación de contraseña (simulado).');
+  });
+
+  document.getElementById('requestAccess').addEventListener('click', () => {
+    alert('Solicitud de acceso enviada (simulado).');
+  });
+</script>
+</body>
+</html>
